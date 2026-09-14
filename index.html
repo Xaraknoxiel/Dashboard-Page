@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Desmatamento no Brasil — Painel de Dados 2021–2025</title>
+
+  <!-- Fontes do Google Fonts: Fraunces (títulos/serifada) e IBM Plex Sans/Mono (corpo/números) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <!-- Folha de estilos própria do site -->
+  <link rel="stylesheet" href="CSS/style.css">
+
+  <!-- Não usamos mais nenhuma biblioteca externa de gráficos (Chart.js foi removido).
+       Todos os gráficos abaixo são desenhados em SVG puro, gerado pelo script.js,
+       então a página funciona 100% offline (não depende de nenhum CDN). -->
+</head>
+<body>
+
+  <!-- ======================= CABEÇALHO / MENU FIXO ======================= -->
+  <header class="site">
+    <div class="wrap site-bar">
+      <!-- Logo/marca do site (ícone de folha + nome) -->
+      <div class="mark">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2C8 6 4 10 4 14.5C4 18.6 7.6 22 12 22C16.4 22 20 18.6 20 14.5C20 10 16 6 12 2Z" stroke="#e3a542" stroke-width="1.6"/>
+        </svg>
+        Painel do Desmatamento
+      </div>
+      <!-- Menu com links que rolam para cada seção da página -->
+      <nav class="site-nav">
+        <a href="#evolucao">Evolução</a>
+        <a href="#estados">Por estado</a>
+        <a href="#biomas">Amazônia × Cerrado</a>
+        <a href="#fontes">Fontes</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ======================= HERO (introdução com destaque) ======================= -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div>
+        <p class="kicker">Amazônia Legal · dados oficiais do PRODES/INPE, ciclos anuais de agosto a julho</p>
+        <h1>Cinco anos de desmatamento no Brasil, <em>ano a ano</em>.</h1>
+      </div>
+      <!-- Número em destaque: soma total dos 5 anos -->
+      <div class="hero-stat">
+        <div class="num">45.715<sup>km²</sup></div>
+        <p>foi a área total desmatada por corte raso na Amazônia Legal entre 2021 e 2025 — uma extensão maior que a dos Países Baixos.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= SEÇÃO 1: EVOLUÇÃO ANUAL (gráfico de linha + tabela) ======================= -->
+  <section id="evolucao">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>A trajetória de queda desde o pico de 2021</h2>
+          <p class="desc">Depois de disparar em 2021, a taxa anual de desmatamento na Amazônia Legal caiu por quatro ciclos seguidos, chegando à menor marca da série em 2025.</p>
+        </div>
+        <div class="section-num">01 / dados PRODES</div>
+      </div>
+
+      <div class="two-col">
+        <!-- Painel esquerdo: gráfico de linha -->
+        <div class="panel">
+          <!-- Esta div fica vazia no HTML; o script.js insere um <svg> dentro dela -->
+          <div class="chart-box" id="chartEvolucao"></div>
+          <div class="legend-row">
+            <span><i style="background:#e3a542"></i>Área desmatada (km²)</span>
+          </div>
+        </div>
+
+        <!-- Painel direito: tabela com os mesmos dados do gráfico -->
+        <div class="panel">
+          <table id="tabelaEvolucao">
+            <thead>
+              <tr>
+                <th>Ano PRODES</th>
+                <th class="num">km² desmatados</th>
+                <th class="num">Variação</th>
+              </tr>
+            </thead>
+            <!-- As linhas da tabela são geradas dinamicamente pelo script.js -->
+            <tbody></tbody>
+          </table>
+          <p class="note">Ano PRODES = ciclo de 1º de agosto do ano anterior a 31 de julho do ano indicado. 2025 é a taxa consolidada, divulgada de forma antecipada em março de 2026.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= SEÇÃO 2: DESMATAMENTO POR ESTADO (gráfico de barras + lista) ======================= -->
+  <section id="estados">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Onde o desmatamento se concentrou em 2024</h2>
+          <p class="desc">Pará, Mato Grosso e Amazonas somaram mais de dois terços da área desmatada no ciclo 2023/2024, o mesmo padrão observado nos anos anteriores.</p>
+        </div>
+        <div class="section-num">02 / recorte estadual</div>
+      </div>
+
+      <div class="two-col">
+        <!-- Painel esquerdo: gráfico de barras horizontal por estado -->
+        <div class="panel">
+          <div class="chart-box short" id="chartEstados"></div>
+        </div>
+
+        <!-- Painel direito: lista de estados com barra de proporção -->
+        <div class="panel">
+          <div class="state-list" id="stateList"></div>
+          <p class="note">Roraima foi o único estado da Amazônia Legal com alta na taxa de desmatamento no ciclo 2023/2024.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= SEÇÃO 3: COMPARAÇÃO ENTRE BIOMAS (gráfico de barras agrupado + cards) ======================= -->
+  <section id="biomas">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <h2>Amazônia não é o único bioma sob pressão</h2>
+          <p class="desc">O Cerrado, segundo maior bioma do país, vinha em trajetória de alta havia cinco anos até registrar sua primeira queda em 2024.</p>
+        </div>
+        <div class="section-num">03 / comparação entre biomas</div>
+      </div>
+
+      <!-- Gráfico comparando Amazônia Legal e Cerrado em 2023 e 2024 -->
+      <div class="panel" style="margin-bottom:22px;">
+        <div class="chart-box" id="chartBiomas"></div>
+        <div class="legend-row">
+          <span><i style="background:#e3a542"></i>Amazônia Legal</span>
+          <span><i style="background:#6fa287"></i>Cerrado</span>
+        </div>
+      </div>
+
+      <!-- Cards de resumo, um para cada bioma -->
+      <div class="biome-grid">
+        <div class="biome-card">
+          <h3>Amazônia Legal</h3>
+          <div class="tag">Floresta tropical · monitorada desde 1988</div>
+          <div class="row"><span class="yr">2023</span><span class="v">9.064 km²</span></div>
+          <div class="row"><span class="yr">2024</span><span class="v">6.288 km²</span></div>
+          <div class="change">↓ 30,6% em relação ao ciclo anterior — a maior queda percentual em 15 anos</div>
+        </div>
+        <div class="biome-card">
+          <h3>Cerrado</h3>
+          <div class="tag">Savana tropical · vegetação nativa mais ameaçada do país</div>
+          <div class="row"><span class="yr">2023</span><span class="v">11.011 km²</span></div>
+          <div class="row"><span class="yr">2024</span><span class="v">8.174 km²</span></div>
+          <div class="change">↓ 25,7% em relação ao ciclo anterior — primeira queda em cinco anos</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======================= RODAPÉ: fontes e metodologia ======================= -->
+  <section id="fontes">
+    <div class="wrap">
+      <footer>
+        <div class="cols">
+          <div>
+            <h3 style="font-size:1rem; margin-bottom:8px;">Sobre os dados</h3>
+            <p style="max-width:62ch;">Os números vêm do PRODES (Programa de Monitoramento do Desmatamento da Amazônia Legal por Satélite), operado pelo INPE, considerado o indicador oficial do governo brasileiro para desmatamento por corte raso. Cada "ano PRODES" cobre o período de 1º de agosto a 31 de julho seguinte. A taxa de 2025 é o valor consolidado, antecipado em março de 2026; os demais anos são taxas consolidadas finais.</p>
+          </div>
+          <div>
+            <h3 style="font-size:1rem; margin-bottom:8px;">Fontes</h3>
+            <ul>
+              <li><a href="https://www.gov.br/inpe/pt-br" target="_blank" rel="noopener">INPE — Instituto Nacional de Pesquisas Espaciais</a></li>
+              <li><a href="https://terrabrasilis.dpi.inpe.br/" target="_blank" rel="noopener">TerraBrasilis / PRODES</a></li>
+              <li><a href="https://www.gov.br/mma/pt-br" target="_blank" rel="noopener">Ministério do Meio Ambiente e Mudança do Clima</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </section>
+
+  <!-- Arquivo JavaScript próprio do site, carregado por último para garantir que o HTML já existe -->
+  <script src="JavaScript/script.js"></script>
+</body>
+</html>

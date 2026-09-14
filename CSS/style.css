@@ -1,0 +1,435 @@
+/* ==========================================================================
+   PALETA DE CORES E VARIÁVEIS GLOBAIS
+   Definidas em :root para serem reutilizadas em todo o CSS via var(--nome)
+   ========================================================================== */
+:root {
+  --bg: #0d1710;              /* fundo geral da página (verde-quase-preto) */
+  --bg-panel: #132018;        /* fundo dos painéis/cartões */
+  --bg-panel-alt: #17281c;    /* fundo alternativo, usado na trilha das barrinhas */
+  --border: #28392c;          /* cor das bordas e linhas divisórias */
+  --text: #eceae0;            /* cor principal do texto (quase branco, quente) */
+  --text-dim: #93a692;        /* texto secundário, mais apagado */
+  --text-faint: #5f7361;      /* texto ainda mais discreto (notas de rodapé) */
+  --accent: #e3a542;          /* cor de destaque (âmbar) usada nos gráficos e títulos */
+  --accent-dim: #8a6a2f;      /* variação mais escura do destaque */
+  --good: #6fa287;            /* verde usado para indicar queda/redução (bom sinal) */
+  --bad: #c1594a;             /* vermelho-terroso usado para indicar alta (mau sinal) */
+  --grid-line: rgba(236, 234, 224, 0.07); /* linhas de grade dos gráficos */
+  --radius: 2px;              /* raio de borda padrão (cantos quase retos) */
+}
+
+/* Reset básico: todo elemento passa a calcular largura/altura incluindo padding e borda */
+* {
+  box-sizing: border-box;
+}
+
+/* Rolagem suave ao clicar nos links do menu (#evolucao, #estados, etc.) */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Estilo base do corpo da página */
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'IBM Plex Sans', sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Títulos usam a fonte serifada Fraunces, para dar personalidade ao design */
+h1, h2, h3 {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  margin: 0;
+  letter-spacing: -0.01em;
+}
+
+.mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+a {
+  color: var(--accent);
+}
+
+/* ==========================================================================
+   ESTRUTURA / CONTAINER
+   ========================================================================== */
+
+/* Container central que limita a largura do conteúdo e centraliza na página */
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+@media (max-width: 640px) {
+  .wrap { padding: 0 20px; } /* menos espaçamento lateral em telas pequenas */
+}
+
+/* ==========================================================================
+   CABEÇALHO FIXO (MENU)
+   ========================================================================== */
+header.site {
+  border-bottom: 1px solid var(--border);
+  position: sticky;   /* fica grudado no topo ao rolar a página */
+  top: 0;
+  z-index: 20;
+  background: rgba(13, 23, 16, 0.92);
+  backdrop-filter: blur(6px); /* desfoque do conteúdo atrás do menu */
+}
+
+.site-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 0;
+}
+
+.site-bar .mark {
+  font-family: 'Fraunces', serif;
+  font-size: 1.05rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.site-bar .mark svg { flex: none; }
+
+nav.site-nav {
+  display: flex;
+  gap: 26px;
+}
+nav.site-nav a {
+  color: var(--text-dim);
+  text-decoration: none;
+  font-size: 0.92rem;
+  transition: color 0.15s ease;
+}
+nav.site-nav a:hover {
+  color: var(--accent);
+}
+/* Esconde o menu de navegação em telas estreitas (celular) */
+@media (max-width: 720px) {
+  nav.site-nav { display: none; }
+}
+
+/* ==========================================================================
+   HERO (bloco de introdução no topo da página)
+   ========================================================================== */
+.hero {
+  padding: 76px 0 64px;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Grade de 2 colunas: título à esquerda, número de destaque à direita */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 56px;
+  align-items: end;
+}
+@media (max-width: 860px) {
+  /* Em telas menores, empilha as colunas em vez de lado a lado */
+  .hero-grid { grid-template-columns: 1fr; gap: 36px; }
+}
+
+.hero .kicker {
+  color: var(--text-dim);
+  font-size: 0.95rem;
+  margin-bottom: 18px;
+  max-width: 46ch;
+}
+
+.hero h1 {
+  font-size: clamp(2.1rem, 4.4vw, 3.3rem); /* tamanho responsivo entre um mínimo e um máximo */
+  line-height: 1.08;
+  color: var(--text);
+}
+.hero h1 em {
+  font-style: normal; /* remove o itálico padrão do <em>, mantém só a cor */
+  color: var(--accent);
+}
+
+/* Bloco do número grande em destaque no hero */
+.hero-stat {
+  border-left: 2px solid var(--accent);
+  padding-left: 22px;
+}
+.hero-stat .num {
+  font-family: 'Fraunces', serif;
+  font-weight: 600;
+  font-size: clamp(2.6rem, 5vw, 3.6rem);
+  color: var(--accent);
+  line-height: 1;
+}
+.hero-stat .num sup {
+  font-size: 0.5em;
+  top: -0.6em;
+}
+.hero-stat p {
+  color: var(--text-dim);
+  font-size: 0.92rem;
+  margin-top: 10px;
+  max-width: 36ch;
+}
+
+/* ==========================================================================
+   SEÇÕES GERAIS (cada bloco de conteúdo da página)
+   ========================================================================== */
+section {
+  padding: 64px 0;
+  border-bottom: 1px solid var(--border);
+}
+section:last-of-type {
+  border-bottom: none; /* a última seção não precisa de linha embaixo */
+}
+
+/* Cabeçalho de cada seção: título + descrição à esquerda, numeração à direita */
+.section-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 24px;
+  margin-bottom: 34px;
+  flex-wrap: wrap;
+}
+.section-head h2 {
+  font-size: 1.6rem;
+}
+.section-head .desc {
+  color: var(--text-dim);
+  font-size: 0.94rem;
+  max-width: 52ch;
+}
+.section-num {
+  color: var(--text-faint);
+  font-size: 0.85rem;
+  font-family: 'IBM Plex Mono', monospace;
+  white-space: nowrap;
+}
+
+/* Painel/cartão usado para envolver gráficos e tabelas */
+.panel {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 26px 26px 18px;
+}
+
+/* Grade de 2 colunas usada nas seções "Evolução" e "Por estado" */
+.two-col {
+  display: grid;
+  grid-template-columns: 1.3fr 1fr;
+  gap: 22px;
+  align-items: stretch;
+}
+@media (max-width: 900px) {
+  .two-col { grid-template-columns: 1fr; } /* empilha em telas menores */
+}
+
+/* Caixa que contém o gráfico em SVG (inserido via script.js) — precisa de altura fixa
+   para o SVG, que usa width:100% e height:100%, saber quanto espaço ocupar. */
+.chart-box {
+  position: relative;
+  height: 320px;
+}
+.chart-box.short {
+  height: 260px;
+}
+/* O <svg> inserido dinamicamente preenche toda a caixa */
+.chart-box svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* ==========================================================================
+   TABELA (seção "Evolução")
+   ========================================================================== */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+th, td {
+  text-align: left;
+  padding: 11px 10px;
+  border-bottom: 1px solid var(--border);
+}
+th {
+  color: var(--text-dim);
+  font-weight: 500;
+  font-size: 0.8rem;
+  letter-spacing: 0.01em;
+}
+/* Colunas numéricas (km² e variação) alinhadas à direita e em fonte monoespaçada */
+td.num, th.num {
+  text-align: right;
+  font-family: 'IBM Plex Mono', monospace;
+}
+tr:last-child td {
+  border-bottom: none;
+}
+/* Cor verde para quedas (delta negativo) e vermelha para altas (delta positivo) */
+td.delta.down { color: var(--good); }
+td.delta.up   { color: var(--bad); }
+
+tbody tr:hover {
+  background: rgba(227, 165, 66, 0.05); /* leve destaque ao passar o mouse na linha */
+}
+
+/* Legenda simples abaixo do gráfico de linha */
+.legend-row {
+  display: flex;
+  gap: 18px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  font-size: 0.82rem;
+  color: var(--text-dim);
+}
+.legend-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+.legend-row i {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  display: inline-block;
+}
+
+/* Nota de rodapé dentro de um painel (texto pequeno e discreto) */
+.note {
+  font-size: 0.82rem;
+  color: var(--text-faint);
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+
+/* ==========================================================================
+   LISTA DE ESTADOS (seção "Por estado")
+   ========================================================================== */
+.state-list {
+  display: flex;
+  flex-direction: column;
+}
+/* Cada linha: nome do estado | barra de proporção | valor em km² */
+.state-row {
+  display: grid;
+  grid-template-columns: 120px 1fr 90px;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border);
+}
+.state-row:last-child {
+  border-bottom: none;
+}
+.state-row .name {
+  font-size: 0.92rem;
+}
+.state-row .bar-track {
+  height: 8px;
+  background: var(--bg-panel-alt);
+  border-radius: 2px;
+  overflow: hidden; /* garante que a barra preenchida não vaze da trilha */
+}
+.state-row .bar-fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  /* a largura real (%) é definida via JavaScript, proporcional ao maior valor */
+}
+.state-row .val {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.85rem;
+  text-align: right;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   CARDS DE BIOMA (seção "Amazônia × Cerrado")
+   ========================================================================== */
+.biome-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+@media (max-width: 640px) {
+  .biome-grid { grid-template-columns: 1fr; } /* um card por linha no celular */
+}
+.biome-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 22px;
+}
+.biome-card h3 {
+  font-size: 1.05rem;
+  margin-bottom: 4px;
+  color: var(--text);
+}
+.biome-card .tag {
+  font-size: 0.78rem;
+  color: var(--text-faint);
+  margin-bottom: 16px;
+}
+.biome-card .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border);
+}
+.biome-card .row:last-child {
+  border-bottom: none;
+}
+.biome-card .row .yr {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+.biome-card .row .v {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.95rem;
+}
+/* Faixa de destaque com o resumo da variação percentual do bioma */
+.biome-card .change {
+  margin-top: 14px;
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  background: rgba(111, 162, 135, 0.1);
+  color: var(--good);
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   RODAPÉ
+   ========================================================================== */
+footer {
+  padding: 44px 0 60px;
+  color: var(--text-faint);
+  font-size: 0.82rem;
+}
+footer .cols {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+}
+@media (max-width: 640px) {
+  footer .cols { grid-template-columns: 1fr; }
+}
+footer a {
+  color: var(--text-dim);
+}
+footer ul {
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
+}
+footer li {
+  margin-bottom: 5px;
+}
